@@ -88,6 +88,35 @@
 
             return $stmt;
         }
+        
+        public function getCheckanswer(){
+            $sqlQuery = "SELECT
+                        id,
+                        question_id,
+                        answer_id
+                      FROM
+                        ". $this->db_table ."
+                    WHERE 
+                        answer_id = $this->answer_id
+                        and question_id = $this->question_id
+                        LIMIT 0,1";
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->answer_id);
+            $stmt->bindParam(1, $this->question_id);
+
+            $stmt->execute();            
+
+            $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if($dataRow){
+                return true;
+            }else{
+                return false;
+            }
+            
+        }
 
         // UPDATE
         public function updateType(){

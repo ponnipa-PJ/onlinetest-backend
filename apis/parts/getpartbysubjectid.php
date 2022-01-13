@@ -13,7 +13,8 @@
 
     $items = new Parts($db);
 
-    $stmt = $items->getParts();
+    $items->subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
+    $stmt = $items->getPartsBySubjectID();
     $itemCount = $stmt->rowCount();
 
 
@@ -31,6 +32,7 @@
                 "score" => $score,
                 "date" => $date,
                 "time" => $time,
+                "subject_id" => $subject_id
             );
 
             array_push($productArr["body"], $e);
@@ -43,19 +45,3 @@
             array("message" => "No record found.")
         );
     }
-    // if($item->id != null){
-    //     // create array
-    //     $emp_arr = array(
-    //         "id" => $item->id,
-    //         "question_id" => $item->question_id,
-    //         "answer" => $item->answer,
-    //     );
-      
-    //     http_response_code(200);
-    //     echo json_encode($emp_arr);
-    // }
-      
-    // else{
-    //     http_response_code(404);
-    //     echo json_encode("Product not found.");
-    // }

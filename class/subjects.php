@@ -1,18 +1,15 @@
 <?php
-    class Parts{
+    class Subjects{
 
         // Connection
         private $conn;
 
         // Table
-        private $db_table = "tbl_parts";
+        private $db_table = "tbl_subjects";
 
         // Columns
         public $id;
         public $name;
-        public $score;
-        public $date;
-        public $time;
 
         // Db connection
         public function __construct($db){
@@ -20,7 +17,7 @@
         }
 
         // GET ALL
-        public function getParts(){
+        public function getSubjects(){
             $sqlQuery = "SELECT * FROM " . $this->db_table . "";
             $stmt = $this->conn->prepare($sqlQuery);
             $stmt->execute();
@@ -28,89 +25,84 @@
         }
 
         // CREATE
-        public function createPart(){
+        public function createSubject(){
             $sqlQuery = "INSERT INTO
                         ". $this->db_table ."
                     SET                        
-                        name = :name,
-                        score = :score,
-                        date = :date,
-                        time = :time";
+                        name = :name";
         
             $stmt = $this->conn->prepare($sqlQuery);
         
             // sanitize
             $this->name=htmlspecialchars(strip_tags($this->name));
-            $this->score=htmlspecialchars(strip_tags($this->score));
-            $this->date=htmlspecialchars(strip_tags($this->date));
-            $this->time=htmlspecialchars(strip_tags($this->time));
         
             // bind data
             $stmt->bindParam(":name", $this->name);
-            $stmt->bindParam(":score", $this->score);
-            $stmt->bindParam(":date", $this->date);
-            $stmt->bindParam(":time", $this->time);
         
             if($stmt->execute()){
-               return true;
+               return $this->conn->lastInsertId();
             }
             return false;
         }
 
         // READ single
-        public function getSingleType(){
+        public function getAnswersByquestionID(){
             $sqlQuery = "SELECT
-                        TypeID,                        
-                        Name
+                        id,
+                        question_id,
+                        name
                       FROM
                         ". $this->db_table ."
                     WHERE 
-                    TypeID = ?
-                    LIMIT 0,1";
+                        question_id = $this->question_id";
 
             $stmt = $this->conn->prepare($sqlQuery);
 
-            $stmt->bindParam(1, $this->TypeID);
-
-            $stmt->execute();
-
-            $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            $this->name = $dataRow['name'];
-        }     
-
-        public function getPartsBySubjectID(){
-            $sqlQuery = "SELECT
-                        *
-                      FROM
-                        ". $this->db_table ."
-                    WHERE 
-                        subject_id = $this->subject_id";
-
-            $stmt = $this->conn->prepare($sqlQuery);
-
-            $stmt->bindParam(1, $this->subject_id);
+            $stmt->bindParam(1, $this->question_id);
 
             $stmt->execute();
 
             return $stmt;
         }
-        
+
+        public function getAllAnswersandQuestion(){
+            $sqlQuery = "SELECT
+                        tbl_questions.name,tbl_questions.id,tbl_answers.answer,tbl_answers.question_id
+                      FROM
+                        tbl_questions
+                    INNER JOIN tbl_answers ON tbl_questions.id = tbl_answers.question_id
+                    WHERE 
+                        tbl_questions.id = tbl_answers.question_id
+                        ORDER BY tbl_questions.id asc";
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->execute();
+
+            return $stmt;
+        } 
+
         // UPDATE
-        public function updateType(){
+        public function updateAnswer(){
             $sqlQuery = "UPDATE
                         ". $this->db_table ."
                     SET
-                        Name = :Name, 
+                        question_id = :question_id,
+                        name = :name
                     WHERE 
-                        TypeID = :TypeID";
+                        id = :id";
         
             $stmt = $this->conn->prepare($sqlQuery);
         
-            $this->Name=htmlspecialchars(strip_tags($this->Name));
-        
-            // bind data
-            $stmt->bindParam(":Name", $this->Name);
+             // sanitize
+             $this->id=htmlspecialchars(strip_tags($this->id));
+             $this->question_id=htmlspecialchars(strip_tags($this->question_id));
+             $this->name=htmlspecialchars(strip_tags($this->name));
+         
+             // bind data
+             $stmt->bindParam(":id", $this->id);
+             $stmt->bindParam(":question_id", $this->question_id);
+             $stmt->bindParam(":name", $this->name);
         
             if($stmt->execute()){
                return true;
@@ -134,4 +126,3 @@
         }
 
     }
-?>

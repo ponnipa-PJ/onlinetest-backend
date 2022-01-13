@@ -16,7 +16,6 @@ $items = new Answers($db);
 $stmt = $ques->getAllAnswersandQuestions();
 $itemCount = $stmt->rowCount();
 $ans = [];
-$type = false;
 // echo $itemCount;
 
 if ($itemCount > 0) {
@@ -37,14 +36,16 @@ if ($itemCount > 0) {
         if ($detailCount > 0) {
             $detailArr["body"] = array();
             while ($detail = $stmtd->fetch(PDO::FETCH_ASSOC)) {
-                // if ( in_array($detail['id'],$ans) ){
-                //     $type = true;
-                // }
+
+                $check=$ques->answer_id = $detail['id'];
+                $check=$ques->question_id = $detail['question_id'];
+                $check=$ques->getCheckanswer();
+
                 $d = array(
                     "id" => $detail['id'],
                     "question_id" => $detail['question_id'],
                     "name" => $detail['name'],
-                    "checked" => $type,
+                    "checked" => $check,
                 );
                 array_push($detailArr["body"], $d);
             }
