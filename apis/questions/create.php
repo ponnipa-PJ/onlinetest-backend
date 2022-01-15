@@ -12,13 +12,14 @@
     $database = new Database();
     $db = $database->getConnection();
 
-    $item = new Questions($db);
+    $item = new Question($db);
 
     $data = json_decode(file_get_contents("php://input"));
 
     $item->name=$data->name;
     $item->description=$data->description;
     $item->part_id=$data->part_id;
+    $item->subject_id=$data->subject_id;
     
     $stmt = $item->createQuestion();
 

@@ -8,7 +8,7 @@
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Questions($db);
+    $items = new Question($db);
 
     $stmt = $items->getQuestions();
     $itemCount = $stmt->rowCount();

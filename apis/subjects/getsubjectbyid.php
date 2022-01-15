@@ -1,24 +1,25 @@
 <?php
     header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
+    header("Access-Control-Allow-Methods: GET");
+    header("Access-Control-Max-Age: 3600");
+    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
     include_once '../../config/database.php';
-    include_once '../../class/tutorial.php';
+    include_once '../../class/subjects.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Tutorial($db);
+    $items = new Subject($db);
 
-    $items->title = isset($_GET['title']) ? $_GET['title'] : die();
-    $stmt = $items->gettitleTutorial();
+    $items->subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
+    $stmt = $items->getsubjectbyid();
     $itemCount = $stmt->rowCount();
 
 
-    // echo json_encode($itemCount);
+    if($itemCount > 0){ 
 
-    if($itemCount > 0){
-        
         $productArr = array();
         $productArr["body"] = array();
         $productArr["itemCount"] = $itemCount;
@@ -27,22 +28,17 @@
             extract($row);
             $e = array(
                 "id" => $id,
-                "title" => $title,
-                "description" => $description,
-                "published" => $published,
-                "createdAt" => $createdAt,
-                "updatedAt" => $updatedAt,
+                "code" => $code,
+                "name" => $name,
             );
 
             array_push($productArr["body"], $e);
         }
         echo json_encode($productArr["body"]);
     }
-
     else{
         http_response_code(404);
         echo json_encode(
             array("message" => "No record found.")
         );
     }
-?>

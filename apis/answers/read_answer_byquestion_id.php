@@ -11,7 +11,7 @@
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Answers($db);
+    $items = new Answer($db);
 
     $items->question_id = isset($_GET['question_id']) ? $_GET['question_id'] : die();
     $stmt = $items->getAnswersByquestionID();

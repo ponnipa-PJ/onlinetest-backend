@@ -1,5 +1,5 @@
 <?php
-    class Parts{
+    class Part{
 
         // Connection
         private $conn;
@@ -85,7 +85,8 @@
                       FROM
                         ". $this->db_table ."
                     WHERE 
-                        subject_id = $this->subject_id";
+                        subject_id = $this->subject_id
+                        AND status = 1";
 
             $stmt = $this->conn->prepare($sqlQuery);
 
@@ -97,20 +98,32 @@
         }
         
         // UPDATE
-        public function updateType(){
+        public function updatePart(){
             $sqlQuery = "UPDATE
                         ". $this->db_table ."
                     SET
-                        Name = :Name, 
+                        name = :name, 
+                        score = :score, 
+                        date = :date, 
+                        time = :time, 
+                        subject_id = :subject_id
                     WHERE 
-                        TypeID = :TypeID";
+                        id = :id";
         
             $stmt = $this->conn->prepare($sqlQuery);
         
-            $this->Name=htmlspecialchars(strip_tags($this->Name));
+            $this->name=htmlspecialchars(strip_tags($this->name));
+            $this->score=htmlspecialchars(strip_tags($this->score));
+            $this->date=htmlspecialchars(strip_tags($this->date));
+            $this->time=htmlspecialchars(strip_tags($this->time));
+            $this->subject_id=htmlspecialchars(strip_tags($this->subject_id));
         
             // bind data
-            $stmt->bindParam(":Name", $this->Name);
+            $stmt->bindParam(":name", $this->name);
+            $stmt->bindParam(":score", $this->score);
+            $stmt->bindParam(":date", $this->date);
+            $stmt->bindParam(":time", $this->time);
+            $stmt->bindParam(":subject_id", $this->subject_id);
         
             if($stmt->execute()){
                return true;
@@ -119,13 +132,13 @@
         }
 
         // DELETE
-        function deleteType(){
-            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE TypeID = ?";
+        function deletePart(){
+            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE id = ?";
             $stmt = $this->conn->prepare($sqlQuery);
         
-            $this->TypeID=htmlspecialchars(strip_tags($this->TypeID));
+            $this->id=htmlspecialchars(strip_tags($this->id));
         
-            $stmt->bindParam(1, $this->TypeID);
+            $stmt->bindParam(1, $this->id);
         
             if($stmt->execute()){
                 return true;

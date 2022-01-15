@@ -1,5 +1,5 @@
 <?php
-    class QuestionsAndAnswers{
+    class QuestionAndAnswer{
 
         // Connection
         private $conn;
@@ -70,7 +70,7 @@
         }
         public function getAllAnswersandQuestions(){
             $sqlQuery = "SELECT 
-            tbl_questions_answers.id,
+            tbl_questions_answers.id as questions_answers_id,
             tbl_questions.id as question_id, 
             max(tbl_questions.name) as name, 
             CONCAT('[', GROUP_CONCAT(CONCAT(tbl_answers.id)), ']') as answer 
@@ -80,9 +80,14 @@
             ON tbl_questions.id = tbl_questions_answers.question_id 
             INNER JOIN tbl_answers 
             ON tbl_questions_answers.answer_id = tbl_answers.id 
+            WHERE tbl_questions.subject_id = $this->subject_id
+            AND tbl_questions.part_id = $this->part_id
             GROUP BY tbl_questions.id";            
 
             $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->subject_id);
+            $stmt->bindParam(1, $this->part_id);
 
             $stmt->execute();
 

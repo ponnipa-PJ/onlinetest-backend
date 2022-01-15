@@ -11,7 +11,7 @@
     $database = new Database();
     $db = $database->getConnection();
     
-    $item = new Questions($db);
+    $item = new Question($db);
     
     $data = json_decode(file_get_contents("php://input"));
     

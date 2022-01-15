@@ -1,23 +1,25 @@
 <?php
     header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
+    header("Access-Control-Allow-Methods: GET");
+    header("Access-Control-Max-Age: 3600");
+    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-    include_once '../config/database.php';
-    include_once '../class/type.php';
+    include_once '../../config/database.php';
+    include_once '../../class/subjects.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Type($db);
+    $items = new Subject($db);
 
-    $stmt = $items->getType();
+    $items->stu_id = isset($_GET['stu_id']) ? $_GET['stu_id'] : die();
+    $stmt = $items->getsubjectbystuid();
     $itemCount = $stmt->rowCount();
 
 
-    // echo json_encode($itemCount);
+    if($itemCount > 0){ 
 
-    if($itemCount > 0){
-        
         $productArr = array();
         $productArr["body"] = array();
         $productArr["itemCount"] = $itemCount;
@@ -25,19 +27,17 @@
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
             $e = array(
-                "TypeID" => $TypeID,
-                "Name" => $Name,
+                "subject_id" => $subject_id,
+                "subject_name" => $subject_name,
             );
 
             array_push($productArr["body"], $e);
         }
         echo json_encode($productArr["body"]);
     }
-
     else{
         http_response_code(404);
         echo json_encode(
             array("message" => "No record found.")
         );
     }
-?>

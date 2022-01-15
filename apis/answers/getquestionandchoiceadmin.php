@@ -10,10 +10,14 @@ include_once '../../class/questionsandanswers.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$ques = new QuestionsAndAnswers($db);
-$items = new Answers($db);
+$ques = new QuestionAndAnswer($db);
+$items = new Answer($db);
+
+$ques->subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
+$ques->part_id = isset($_GET['part_id']) ? $_GET['part_id'] : die();
 
 $stmt = $ques->getAllAnswersandQuestions();
+
 $itemCount = $stmt->rowCount();
 $ans = [];
 // echo $itemCount;
@@ -26,23 +30,22 @@ if ($itemCount > 0) {
     $productArr["itemCount"] = $itemCount;
     
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // print_r($row['id']);
-        $items->question_id = $row['id'];
+        // print_r($row['question_id']);
+        $items->question_id = $row['question_id'];
         $stmtd = $items->getAnswersByquestionID();
         $detailCount = $stmtd->rowCount();
         $ans = $row['answer'];
         
-        // echo $detailCount;
         if ($detailCount > 0) {
             $detailArr["body"] = array();
             while ($detail = $stmtd->fetch(PDO::FETCH_ASSOC)) {
-
+                // print_r($detail);
                 $check=$ques->answer_id = $detail['id'];
                 $check=$ques->question_id = $detail['question_id'];
                 $check=$ques->getCheckanswer();
-
+                
                 $d = array(
-                    "id" => $detail['id'],
+                    "answer_id" => $detail['id'],
                     "question_id" => $detail['question_id'],
                     "name" => $detail['name'],
                     "checked" => $check,
@@ -52,7 +55,7 @@ if ($itemCount > 0) {
         }
         extract($row);
         $e = array(
-            "id" => $id,
+            "questions_answers_id" => $questions_answers_id,
             "question_id" => $question_id,
             "name" => $name,
             "answer" => $answer,

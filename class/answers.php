@@ -1,5 +1,5 @@
 <?php
-    class Answers{
+    class Answer{
 
         // Connection
         private $conn;
@@ -115,13 +115,13 @@
         }
 
         // DELETE
-        function deleteType(){
-            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE TypeID = ?";
+        function deleteAnswer(){
+            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE id = ?";
             $stmt = $this->conn->prepare($sqlQuery);
         
-            $this->TypeID=htmlspecialchars(strip_tags($this->TypeID));
+            $this->id=htmlspecialchars(strip_tags($this->id));
         
-            $stmt->bindParam(1, $this->TypeID);
+            $stmt->bindParam(1, $this->id);
         
             if($stmt->execute()){
                 return true;

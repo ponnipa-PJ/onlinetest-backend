@@ -7,24 +7,22 @@
     header('Access-Control-Allow-Credentials', true);
 
     include_once '../../config/database.php';
-    include_once '../../class/tutorial.php';
+    include_once '../../class/stu_answers.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
-    $item = new Tutorial($db);
+    $item = new StuAnswer($db);
 
     $data = json_decode(file_get_contents("php://input"));
-
-    $item->title=$data->title;
-    $item->description=$data->description;
-    $item->published=$data->published;
-    $item->createdAt=$data->createdAt;
-    $item->updatedAt=$data->updatedAt;
     
-    if($item->createTutorial()){
+    $item->stu_id=$data->stu_id;
+    $item->question_id=$data->question_id;
+    $item->answer_id=$data->answer_id;
+    
+    if($item->createStuAnswers()){
         echo 0;
     } else{
-        echo 'Product could not be created.';
+        echo 'Question and Answer could not be created.';
     }
 ?>

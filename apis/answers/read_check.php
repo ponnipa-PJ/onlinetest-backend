@@ -11,7 +11,7 @@ include_once '../../class/questionsandanswers.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$item = new QuestionsAndAnswers($db);
+$item = new QuestionAndAnswer($db);
 
 $item->answer_id = isset($_GET['answer_id']) ? $_GET['answer_id'] : die();
 $item->question_id = isset($_GET['question_id']) ? $_GET['question_id'] : die();

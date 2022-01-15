@@ -11,7 +11,7 @@
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Parts($db);
+    $items = new Part($db);
 
     $stmt = $items->getParts();
     $itemCount = $stmt->rowCount();

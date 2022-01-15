@@ -1,5 +1,5 @@
 <?php
-    class Questions{
+    class Question{
 
         // Connection
         private $conn;
@@ -33,6 +33,7 @@
                     SET                        
                         name = :name,
                         description = :description,
+                        subject_id = :subject_id,
                         part_id = :part_id";
         
             $stmt = $this->conn->prepare($sqlQuery);
@@ -41,11 +42,13 @@
             $this->name=htmlspecialchars(strip_tags($this->name));
             $this->description=htmlspecialchars(strip_tags($this->description));
             $this->part_id=htmlspecialchars(strip_tags($this->part_id));
+            $this->subject_id=htmlspecialchars(strip_tags($this->subject_id));
         
             // bind data
             $stmt->bindParam(":name", $this->name);
             $stmt->bindParam(":description", $this->description);
             $stmt->bindParam(":part_id", $this->part_id);
+            $stmt->bindParam(":subject_id", $this->subject_id);
         
             if($stmt->execute()){
                 return $this->conn->lastInsertId();

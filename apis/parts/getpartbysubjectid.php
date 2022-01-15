@@ -11,7 +11,7 @@
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Parts($db);
+    $items = new Part($db);
 
     $items->subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
     $stmt = $items->getPartsBySubjectID();

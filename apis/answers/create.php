@@ -12,7 +12,7 @@
     $database = new Database();
     $db = $database->getConnection();
 
-    $item = new Answers($db);
+    $item = new Answer($db);
 
     $data = json_decode(file_get_contents("php://input"));
 
