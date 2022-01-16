@@ -6,14 +6,14 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
     include_once '../../config/database.php';
-    include_once '../../class/subjects.php';
+    include_once '../../class/users.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Subject($db);
+    $items = new User($db);
 
-    $stmt = $items->getSubjects();
+    $stmt = $items->getUser();
     $itemCount = $stmt->rowCount();
 
 
@@ -27,8 +27,8 @@
             extract($row);
             $e = array(
                 "id" => $id,
-                "code" => $code,
-                "name" => $name
+                "name" => $name,
+                "role" => $role
             );
 
             array_push($productArr["body"], $e);

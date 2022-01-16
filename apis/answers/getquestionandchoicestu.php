@@ -21,7 +21,7 @@ $subid = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
 
 // echo $subid;
 $part->subject_id = $subid;
-$p = $part->getPartsBySubjectID();
+$p = $part->getPartsBySubjectIDstu();
 $Countparts = $p->rowCount();
 
 // echo $Countparts;

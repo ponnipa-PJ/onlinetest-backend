@@ -7,25 +7,19 @@
     header('Access-Control-Allow-Credentials', true);
 
     include_once '../../config/database.php';
-    include_once '../../class/parts.php';
+    include_once '../../class/subjects.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
-    $item = new Part($db);
+    $item = new Subject($db);
 
     $data = json_decode(file_get_contents("php://input"));
 
     $item->name=$data->name;
-    $item->score=$data->score;
-    $item->date=$data->date;
-    $item->time=$data->time;
-    $item->status=$data->status;
-    $item->subject_id=$data->subject_id;
+    $item->code=$data->code;
     
-    if($item->createPart()){
-        echo 0;
-    } else{
-        echo 'Part could not be created.';
-    }
+    $stmt = $item->createSubject();
+
+    echo $stmt;
 ?>

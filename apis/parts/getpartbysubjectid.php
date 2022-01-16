@@ -32,7 +32,8 @@
                 "score" => $score,
                 "date" => $date,
                 "time" => $time,
-                "subject_id" => $subject_id
+                "subject_id" => $subject_id,
+                "status" => $status
             );
 
             array_push($productArr["body"], $e);
@@ -40,8 +41,6 @@
         echo json_encode($productArr["body"]);
     }
     else{
-        http_response_code(404);
-        echo json_encode(
-            array("message" => "No record found.")
-        );
+        // http_response_code(404);
+        echo false;
     }

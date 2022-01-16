@@ -6,14 +6,16 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
     include_once '../../config/database.php';
-    include_once '../../class/subjects.php';
+    include_once '../../class/parts.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
-    $items = new Subject($db);
+    $items = new Part($db);
 
-    $stmt = $items->getSubjects();
+    $items->part_id = isset($_GET['part_id']) ? $_GET['part_id'] : die();
+    $items->subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
+    $stmt = $items->getPartsByID();
     $itemCount = $stmt->rowCount();
 
 
@@ -27,8 +29,11 @@
             extract($row);
             $e = array(
                 "id" => $id,
-                "code" => $code,
-                "name" => $name
+                "name" => $name,
+                "score" => $score,
+                "date" => $date,
+                "time" => $time,
+                "subject_id" => $subject_id
             );
 
             array_push($productArr["body"], $e);
@@ -41,19 +46,3 @@
             array("message" => "No record found.")
         );
     }
-    // if($item->id != null){
-    //     // create array
-    //     $emp_arr = array(
-    //         "id" => $item->id,
-    //         "question_id" => $item->question_id,
-    //         "answer" => $item->answer,
-    //     );
-      
-    //     http_response_code(200);
-    //     echo json_encode($emp_arr);
-    // }
-      
-    // else{
-    //     http_response_code(404);
-    //     echo json_encode("Product not found.");
-    // }

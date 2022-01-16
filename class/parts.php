@@ -35,7 +35,9 @@
                         name = :name,
                         score = :score,
                         date = :date,
-                        time = :time";
+                        time = :time,
+                        status = :status,
+                        subject_id = :subject_id";
         
             $stmt = $this->conn->prepare($sqlQuery);
         
@@ -44,12 +46,16 @@
             $this->score=htmlspecialchars(strip_tags($this->score));
             $this->date=htmlspecialchars(strip_tags($this->date));
             $this->time=htmlspecialchars(strip_tags($this->time));
+            $this->status=htmlspecialchars(strip_tags($this->status));
+            $this->subject_id=htmlspecialchars(strip_tags($this->subject_id));
         
             // bind data
             $stmt->bindParam(":name", $this->name);
             $stmt->bindParam(":score", $this->score);
             $stmt->bindParam(":date", $this->date);
             $stmt->bindParam(":time", $this->time);
+            $stmt->bindParam(":status", $this->status);
+            $stmt->bindParam(":subject_id", $this->subject_id);
         
             if($stmt->execute()){
                return true;
@@ -85,12 +91,48 @@
                       FROM
                         ". $this->db_table ."
                     WHERE 
-                        subject_id = $this->subject_id
+                        subject_id = $this->subject_id";
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->subject_id);
+
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function getPartsBySubjectIDstu(){
+            $sqlQuery = "SELECT
+                        *
+                      FROM
+                        ". $this->db_table ."
+                    WHERE 
+                        subject_id = $this->subject_id                        
                         AND status = 1";
 
             $stmt = $this->conn->prepare($sqlQuery);
 
             $stmt->bindParam(1, $this->subject_id);
+
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function getPartsByID(){
+            $sqlQuery = "SELECT
+                        *
+                      FROM
+                        ". $this->db_table ."
+                    WHERE 
+                        subject_id = $this->subject_id
+                        AND id = $this->part_id";
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->subject_id);
+            $stmt->bindParam(1, $this->part_id);
 
             $stmt->execute();
 

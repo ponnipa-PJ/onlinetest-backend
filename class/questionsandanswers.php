@@ -80,8 +80,11 @@
             ON tbl_questions.id = tbl_questions_answers.question_id 
             INNER JOIN tbl_answers 
             ON tbl_questions_answers.answer_id = tbl_answers.id 
+            INNER JOIN tbl_parts 
+            ON tbl_questions.part_id = tbl_parts.id 
             WHERE tbl_questions.subject_id = $this->subject_id
             AND tbl_questions.part_id = $this->part_id
+            AND tbl_parts.status = 1
             GROUP BY tbl_questions.id";            
 
             $stmt = $this->conn->prepare($sqlQuery);
