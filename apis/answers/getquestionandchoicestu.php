@@ -51,7 +51,7 @@ if ($itemCount > 0) {
                     while ($ans = $stmtanswer->fetch(PDO::FETCH_ASSOC)) {
                         $check = $stuanswers->answer_id = $ans['id'];
                         $check = $stuanswers->question_id = $ans['question_id'];
-                        $check = $stuanswers->stu_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();;
+                        $check = $stuanswers->stu_id = isset($_GET['stu_id']) ? $_GET['stu_id'] : die();
                         $check = $stuanswers->getCheckanswerstu();
 
                         $a = array(
