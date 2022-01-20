@@ -38,6 +38,6 @@
         echo json_encode($productArr["body"]);
     }
     else{
-        // http_response_code(404);
-        echo false;
+        http_response_code(404);
+        echo json_encode("User not found.");
     }
