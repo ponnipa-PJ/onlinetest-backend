@@ -66,6 +66,22 @@ class User
         return $stmt;
     }
 
+    public function getstu()
+    {
+        $sqlQuery = "SELECT
+                        *
+                      FROM
+                      " . $this->db_table . "
+                    WHERE 
+                    role = 1";
+
+        $stmt = $this->conn->prepare($sqlQuery);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     // CREATE
     public function createPart()
     {

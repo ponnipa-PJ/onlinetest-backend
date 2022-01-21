@@ -1,9 +1,9 @@
 <?php
     header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
-    header("Access-Control-Allow-Methods", "POST, OPTIONS");
+    header("Access-Control-Allow-Methods: GET");
     header("Access-Control-Max-Age: 3600");
-    header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
+    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
     include_once '../../config/database.php';
     include_once '../../class/users.php';
@@ -12,10 +12,8 @@
     $db = $database->getConnection();
 
     $items = new User($db);
-    $data = json_decode(file_get_contents("php://input"));
-    $items->name=$data->name;
-    $items->pass=$data->pass;
-    $stmt = $items->getUserlogin();
+
+    $stmt = $items->getstu();
     $itemCount = $stmt->rowCount();
 
 
@@ -30,7 +28,6 @@
             $e = array(
                 "id" => $id,
                 "name" => $name,
-                "role" => $role,
             );
 
             array_push($productArr["body"], $e);
@@ -39,5 +36,7 @@
     }
     else{
         http_response_code(404);
-        echo json_encode("User not found.");
+        echo json_encode(
+            array("message" => "No record found.")
+        );
     }
