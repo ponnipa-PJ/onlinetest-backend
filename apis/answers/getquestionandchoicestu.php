@@ -37,6 +37,7 @@ if ($itemCount > 0) {
         $ques->subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
         $stmtd = $ques->getAllAnswersandQuestions();
         $questionCount = $stmtd->rowCount();
+        $sumscore = 0;
 
         if ($questionCount > 0) {
 
@@ -52,6 +53,7 @@ if ($itemCount > 0) {
                 if ($answerstu == $question['answer']) {
                     $scorestu = $scoreperques;
                 }
+                $sumscore = $sumscore+$scorestu;
                 $answerArr = array();
                 $answerArr["body"] = array();
                 $answer->question_id = $question['question_id'];
@@ -88,7 +90,8 @@ if ($itemCount > 0) {
             "part_id" => $id,
             "name" => $name,
             "score" => $score,
-            "questions" => $questionArr["body"]
+            "questions" => $questionArr["body"],
+            "sumscore" => $sumscore
         );
         array_push($productArr["body"], $e);
     }
