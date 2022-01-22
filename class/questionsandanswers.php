@@ -96,6 +96,27 @@
 
             return $stmt;
         }
+
+        public function getScorebystu(){
+            $sqlQuery = "SELECT 
+            CONCAT('[', GROUP_CONCAT(CONCAT(tbl_stu_answers.answer_id)), ']') as answerstu 
+            FROM tbl_stu_answers 
+            WHERE tbl_stu_answers.stu_id=$this->stu_id 
+            and tbl_stu_answers.question_id = $this->question_id ";       
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->stu_id);
+            $stmt->bindParam(1, $this->question_id);
+
+            $stmt->execute();
+            $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($dataRow){
+                return  $dataRow['answerstu'];
+            }else{
+                return [0];
+            }
+        }
         
         public function getCheckanswer(){
             $sqlQuery = "SELECT

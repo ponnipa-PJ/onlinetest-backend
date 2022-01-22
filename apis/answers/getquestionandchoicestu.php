@@ -39,14 +39,25 @@ if ($itemCount > 0) {
         $questionCount = $stmtd->rowCount();
 
         if ($questionCount > 0) {
-            $answerArr = array();
-            $answerArr["body"] = array();
 
             while ($question = $stmtd->fetch(PDO::FETCH_ASSOC)) {
 
+                $answerstu = $ques->stu_id = isset($_GET['stu_id']) ? $_GET['stu_id'] : die();
+                $answerstu = $ques->question_id = $question['question_id'];
+                $answerstu = $ques->getScorebystu();
+    
+                $maxscore = $row['score'];
+                $scoreperques = $maxscore/$questionCount;
+                $scorestu = 0;
+                if ($answerstu == $question['answer']) {
+                    $scorestu = $scoreperques;
+                }
+                $answerArr = array();
+                $answerArr["body"] = array();
                 $answer->question_id = $question['question_id'];
                 $stmtanswer = $answer->getAnswersByquestionID();
                 $answerArrCount = $stmtanswer->rowCount();
+
                 if ($answerArrCount > 0) {
                     while ($ans = $stmtanswer->fetch(PDO::FETCH_ASSOC)) {
                         $check = $stuanswers->answer_id = $ans['id'];
@@ -66,7 +77,8 @@ if ($itemCount > 0) {
                 $q = array(
                     "question_id" => $question['question_id'],
                     "name" => $question['name'],
-                    "details" => $answerArr["body"]
+                    "details" => $answerArr["body"],
+                    "score" => $scorestu
                 );
                 array_push($questionArr["body"], $q);
             }
