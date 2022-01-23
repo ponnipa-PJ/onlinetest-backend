@@ -18,7 +18,6 @@
     $item->id = $data->id;
     
     // product values
-    $item->question_id=$data->question_id;
     $item->name=$data->name;
     
     if($item->updateAnswer()){

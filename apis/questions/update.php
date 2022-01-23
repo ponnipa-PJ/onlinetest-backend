@@ -20,10 +20,9 @@
     // product values
     $item->name=$data->name;
     $item->description=$data->description;
-    $item->part_id=$data->part_id;
     
     if($item->updateQuestion()){
-        echo json_encode("Product data updated.");
+        echo true;
     } else{
         echo json_encode("Data could not be updated");
     }

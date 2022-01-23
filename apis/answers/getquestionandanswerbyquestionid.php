@@ -6,18 +6,19 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 include_once '../../config/database.php';
-include_once '../../class/questionsandanswers.php';
 include_once '../../class/answers.php';
+include_once '../../class/questions.php';
+include_once '../../class/questionsandanswers.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$items = new QuestionAndAnswer($db);
+$items = new Question($db);
 $answeradmin = new Answer($db);
+$questionsandanswer = new QuestionAndAnswer($db);
 
-$items->subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : die();
-$items->part_id = isset($_GET['part_id']) ? $_GET['part_id'] : die();
-$stmt = $items->getAllAnswersandQuestions();
+$items->question_id = isset($_GET['question_id']) ? $_GET['question_id'] : die();
+$stmt = $items->getQuestionsAndAnswersbyquestionid();
 $itemCount = $stmt->rowCount();
 
 
@@ -29,7 +30,7 @@ if ($itemCount > 0) {
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
-        $answeradmin->question_id = $row['question_id'];
+        $answeradmin->question_id = $row['id'];
         $stmtanswer = $answeradmin->getAnswersByquestionID();
         $answerArrCount = $stmtanswer->rowCount();
 
@@ -37,9 +38,9 @@ if ($itemCount > 0) {
             $answerArr = array();
             $answerArr["body"] = array();
             while ($ans = $stmtanswer->fetch(PDO::FETCH_ASSOC)) {
-                $check = $items->answer_id = $ans['id'];
-                $check = $items->question_id = $ans['question_id'];
-                $check = $items->getCheckanswer();
+                $check = $questionsandanswer->answer_id = $ans['id'];
+                $check = $questionsandanswer->question_id = $ans['question_id'];
+                $check = $questionsandanswer->getCheckanswer();
 
                 $a = array(
                     "answer_id" => $ans['id'],
@@ -52,7 +53,7 @@ if ($itemCount > 0) {
         }
         extract($row);
         $e = array(
-            "question_id" => $question_id,
+            "question_id" => $id,
             "name" => $name,
             "details" => $answerArr["body"]
         );

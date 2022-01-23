@@ -68,6 +68,35 @@
 
             return $stmt;
         }
+
+        public function getAllAnswersandQuestionsadmin(){
+            $sqlQuery = "SELECT 
+            tbl_questions_answers.id as questions_answers_id,
+            tbl_questions.id as question_id, 
+            max(tbl_questions.name) as name, 
+            CONCAT('[', GROUP_CONCAT(CONCAT(tbl_answers.id)), ']') as answer 
+            -- CONCAT('[', GROUP_CONCAT(CONCAT('\"', tbl_answers.id , '\"')), ']') as answer 
+            FROM 
+            tbl_questions INNER JOIN tbl_questions_answers 
+            ON tbl_questions.id = tbl_questions_answers.question_id 
+            INNER JOIN tbl_answers 
+            ON tbl_questions_answers.answer_id = tbl_answers.id 
+            INNER JOIN tbl_parts 
+            ON tbl_questions.part_id = tbl_parts.id 
+            WHERE tbl_questions.subject_id = $this->subject_id
+            AND tbl_questions.part_id = $this->part_id
+            GROUP BY tbl_questions.id";            
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->subject_id);
+            $stmt->bindParam(1, $this->part_id);
+
+            $stmt->execute();
+
+            return $stmt;
+        }
+
         public function getAllAnswersandQuestions(){
             $sqlQuery = "SELECT 
             tbl_questions_answers.id as questions_answers_id,
@@ -170,13 +199,13 @@
         }
 
         // DELETE
-        function deleteType(){
-            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE TypeID = ?";
+        function deleteQuestionsandAnswers(){
+            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE question_id = ?";
             $stmt = $this->conn->prepare($sqlQuery);
         
-            $this->TypeID=htmlspecialchars(strip_tags($this->TypeID));
+            $this->question_id=htmlspecialchars(strip_tags($this->question_id));
         
-            $stmt->bindParam(1, $this->TypeID);
+            $stmt->bindParam(1, $this->question_id);
         
             if($stmt->execute()){
                 return true;

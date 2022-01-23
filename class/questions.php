@@ -79,7 +79,23 @@
             $this->name = $dataRow['name'];
             $this->description = $dataRow['description'];
             $this->part_id = $dataRow['part_id'];
-        }        
+        }    
+        
+        public function getQuestionsAndAnswersbyquestionid(){
+            $sqlQuery = "SELECT 
+            *
+            FROM 
+            tbl_questions 
+            WHERE tbl_questions.id = $this->question_id";            
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->question_id);
+
+            $stmt->execute();
+
+            return $stmt;
+        }
 
         // UPDATE
         public function updateQuestion(){
@@ -87,8 +103,7 @@
                         ". $this->db_table ."
                     SET
                     name = :name,
-                    description = :description,
-                    part_id = :part_id
+                    description = :description
                     WHERE 
                         id = :id";
         
@@ -98,13 +113,11 @@
             $this->id=htmlspecialchars(strip_tags($this->id));
             $this->name=htmlspecialchars(strip_tags($this->name));
             $this->description=htmlspecialchars(strip_tags($this->description));
-            $this->part_id=htmlspecialchars(strip_tags($this->part_id));
         
             // bind data
             $stmt->bindParam(":id", $this->id);
             $stmt->bindParam(":name", $this->name);
             $stmt->bindParam(":description", $this->description);
-            $stmt->bindParam(":part_id", $this->part_id);
 
             if($stmt->execute()){
                return true;

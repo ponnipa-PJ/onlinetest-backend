@@ -91,7 +91,6 @@
             $sqlQuery = "UPDATE
                         ". $this->db_table ."
                     SET
-                        question_id = :question_id,
                         name = :name
                     WHERE 
                         id = :id";
@@ -100,12 +99,10 @@
         
              // sanitize
              $this->id=htmlspecialchars(strip_tags($this->id));
-             $this->question_id=htmlspecialchars(strip_tags($this->question_id));
              $this->name=htmlspecialchars(strip_tags($this->name));
          
              // bind data
              $stmt->bindParam(":id", $this->id);
-             $stmt->bindParam(":question_id", $this->question_id);
              $stmt->bindParam(":name", $this->name);
         
             if($stmt->execute()){
